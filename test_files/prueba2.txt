@@ -1,0 +1,9 @@
+INICIO
+/* Creacion de una tabla de usuarios
+DESIGN TABLE usuarios WITH (id-NUMBER, nombre-STRING, fecha_registro-TIMEDATE).
+/* Consulta de usuarios registrados despues de cierta fecha 
+SELECT id, nombre FROM usuarios WHERE fecha_registro > '2023-01-01' APPLIES.
+FIN
+
+
+

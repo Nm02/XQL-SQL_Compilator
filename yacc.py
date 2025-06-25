@@ -4,7 +4,7 @@ from lex import tokens, lexer
 # Variables de salida (para traducción, etc.)
 resultados = []
 
-# Reglas de producción de la gramática (completaremos una por una después)
+# Reglas de producción de la gramática
 def p_S(p):
     'S : INICIO_PROGRAMA A FIN_PROGRAMA'
     p[0] = "\n".join(resultados)
@@ -59,6 +59,7 @@ def p_B_lista(p):
     else:
         p[0] = f", {p[2]}"
 
+"""*************"""
 def p_B_vacio(p):
     'B : '
     # Caso base: no hay más campos
@@ -125,7 +126,8 @@ def p_G_campo(p):
 #H
 def p_H_mas(p):
     'H : ID Tk_TO E VERIFICACION ID OPERACION_LOGICA E H'
-    # p[1]: campo a modificar, p[3]: nuevo valor, p[4]: VERIFICACION (siempre 'IF'), p[5]: campo condición, p[6]: operador, p[7]: valor condición, p[8]: más modificaciones
+    # p[1]: campo a modificar, p[3]: nuevo valor, p[4]: VERIFICACION (siempre 'IF'), p[5]: campo condición, p[6]: operador, p[7]: valor condición, p[8]: 
+    # más modificaciones
     # Pero según tu gramática, cada H solo agrega SET adicional
     resto = p[8] if p[8] else ''
     p[0] = f", {p[1]} = {p[3]}{resto}"

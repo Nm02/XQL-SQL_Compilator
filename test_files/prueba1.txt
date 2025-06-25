@@ -6,3 +6,7 @@ SELECT producto, codigo FROM catalogo WHERE precio > 50 APPLIES.
 MODIFY catalogo FIELD precio TO 45 IF producto = 'Smartphone'. 
 DROP TABLE catalogo. 
 FIN
+
+
+
+

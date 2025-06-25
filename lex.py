@@ -43,7 +43,7 @@ t_FIN_LINEA        = r'\.'
 t_ABRIR_PARENTESIS = r'\('
 t_CERRAR_PARENTESIS = r'\)'
 t_COMA             = r','
-t_OPERACION_LOGICA = r'(=|<|>)'
+t_OPERACION_LOGICA = r'(>=|<=|=|<|>)'
 t_PUNTO_COMA       = r';'
 t_SEPARADOR        = r'-'
 
@@ -53,8 +53,6 @@ def t_COMENTARIO(t):
     r'/\*([A-Za-z0-9!\"#\$%&\'\(\)\*\+\,\-\./:;<=>\?@\[\]\\\^_`\{\|\}~ ]*)'
     pass
 
-
-
 # Números enteros
 def t_NUMERO_ENTERO(t):
     r'\d+'
@@ -63,19 +61,15 @@ def t_NUMERO_ENTERO(t):
 
 # Cadenas de texto (comillas simples o dobles)
 def t_CADENA_TEXTO(t):
-    r'(\'([A-Za-z0-9!\"#\$%&\'\(\)\*\+\,\-\./:;<=>\?@\[\]\\\^_`\{\|\}~ ]*)\'|\"([A-Za-z0-9!\"#\$%&\'\(\)\*\+\,\-\./:;<=>\?@\[\]\\\^_`\{\|\}~ ]*)\")'
+    r'\'[^\']*\'|\"[^\"]*\"'
     t.value = t.value[1:-1]
     return t
-
-
 
 # Identificadores y palabras reservadas
 def t_ID(t):
     r'[A-Za-z_][A-Za-z0-9_]*'
     t.type = reserved.get(t.value.lower(), 'ID')
     return t
-
-
 
 # Ignorar espacios y tabulaciones
 t_ignore = ' \t\r'
@@ -85,7 +79,6 @@ t_ignore = ' \t\r'
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-
 
 # Manejo de errores léxicos
 def t_error(t):
@@ -99,22 +92,25 @@ def t_error(t):
 # Construir el lexer
 lexer = lex.lex()
 
-
-
-
-
 # Prueba básica
 if __name__ == "__main__":
     data = '''
-    INICIO 
-    /* Aca comienza el programa ejemplo 
-    DESIGN TABLE catalogo WITH (producto-STRING, precio - NUMBER);. 
-    SELECT producto, codigo FROM catalogo WHERE precio > 50 APPLIES. 
-    /* otro comentario 
-    MODIFY catalogo FIELD precio TO 45 IF producto = 'Smartphone'. 
-    DROP TABLE catalogo. 
-    FIN 
+    INICIO
+    /* Create a table for orders
+    DESIGN TABLE orders WITH (order_id-NUMBER, customer-STRING, total-NUMBER, created_at-TIMEDATE).
+    /* Select high value orders
+    SELECT order_id, customer FROM orders WHERE created_at > '2024-01-01' APPLIES.
+    /* Set all orders before 2023 as archived
+    MODIFY orders FIELD customer TO 'archived' IF created_at < '2023-01-01'.
+    /* Remove old table
+    DROP TABLE old_orders.
+    FIN
     '''
+
     lexer.input(data)
     for token in lexer:
         print(token)
+
+
+
+
